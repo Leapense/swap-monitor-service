@@ -19,8 +19,14 @@ if [ -z "$install_mode" ]; then
 fi
 
 SOURCE_SCRIPT="swapMemMonitoring.sh"
+SUDO_ASKPASS_SCRIPT="zenity_askpass.sh"
 if [ ! -f "$SOURCE_SCRIPT" ]; then
     zenity --error --text="Source script cannot be found."
+    exit 1
+fi
+
+if [ ! -f "$SUDO_ASKPASS_SCRIPT" ]; then
+    zenity --error --text="ASKPASS script cannot be found."
     exit 1
 fi
 
@@ -28,6 +34,11 @@ if [ "$install_mode" = "1" ]; then
     # 사용자 설치: 파일은 ~/.local/bin 에 복사
     install_dir="$HOME/.local/bin"
     mkdir -p "$install_dir"
+    
+    if cp "$SUDO_ASKPASS_SCRIPT" "$install_dir/zenity_askpass.sh"; then
+        chmod +x "$install_dir/zenity_askpass.sh"
+    fi
+    
     if cp "$SOURCE_SCRIPT" "$install_dir/swapMemMonitoring.sh"; then
         chmod +x "$install_dir/swapMemMonitoring.sh"
         
@@ -59,6 +70,11 @@ EOF
 else
     # 시스템 전체 설치: 파일은 /usr/local/bin 에 복사 (sudo 필요)
     install_dir="/usr/local/bin"
+    
+    if sudo cp "$SUDO_ASKPASS_SCRIPT" "$install_dir/zenity_askpass.sh"; then
+        sudo chmod +x "$install_dir/zenity_askpass.sh"
+    fi
+    
     if sudo cp "$SOURCE_SCRIPT" "$install_dir/swapMemMonitoring.sh"; then
         sudo chmod +x "$install_dir/swapMemMonitoring.sh"
         
