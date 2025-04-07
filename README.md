@@ -18,25 +18,6 @@ Swap Monitor Service is a Bash script that monitors swap memory usage and automa
 - Sudo privileges.
 - For GUI sudo password prompts, the Zenity askpass helper script is required.
 
-## Zenity Askpass Helper
-
-To enable a GUI password prompt for sudo commands, create a Zenity askpass helper script:
-
-1. Create a file named `zenity_askpass.sh` with the following content:
-
-    ```bash
-    #!/bin/bash
-    zenity --password --title="Sudo Password Required" --text="Please enter your sudo password:" 2>/dev/null
-    ```
-
-2. Make the script executable and note its full path:
-
-    ```bash
-    chmod +x /path/to/zenity_askpass.sh
-    ```
-
-3. The main script (`swapMemMonitoring.sh`) exports the environment variable `SUDO_ASKPASS` pointing to this helper so that sudo commands invoked with the `-A` option will use it.
-
 ## Installation
 
 ### Using the Installer Script
