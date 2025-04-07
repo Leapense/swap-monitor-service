@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set SUDO_ASKPASS for sudo -A to work with a Zenity GUI prompt
-export SUDO_ASKPASS="/path/to/zenity_askpass.sh"
+export SUDO_ASKPASS="zenity_askpass.sh"
 
 # If DISPLAY is not set, assign default values
 if [ -z "$DISPLAY" ]; then
