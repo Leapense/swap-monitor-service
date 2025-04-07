@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# 만약 DISPLAY가 설정되어 있지 않다면 기본값과 XAUTHORITY를 설정
+# Set SUDO_ASKPASS for sudo -A to work with a Zenity GUI prompt
+export SUDO_ASKPASS="/path/to/zenity_askpass.sh"
+
+# If DISPLAY is not set, assign default values
 if [ -z "$DISPLAY" ]; then
     echo "DISPLAY variable not found. Setting DISPLAY to :0"
     export DISPLAY=:0
@@ -11,14 +14,14 @@ if [ -z "$XAUTHORITY" ]; then
     export XAUTHORITY="$HOME/.Xauthority"
 fi
 
-# GUI 사용 여부 플래그 설정
+# Set GUI usage flag
 if [ -n "$DISPLAY" ]; then
     USE_GUI=true
 else
     USE_GUI=false
 fi
 
-# 배포판 정보 획득
+# Get distribution info
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     distro=$ID
@@ -26,7 +29,7 @@ else
     distro="unknown"
 fi
 
-# Zenity 설치 여부 확인 및 자동 설치 (GUI 모드인 경우)
+# Check if Zenity is installed and install it if necessary (GUI mode)
 if ! command -v zenity &>/dev/null; then
     if [ "$USE_GUI" = true ]; then
         case "$distro" in
@@ -55,7 +58,7 @@ fi
 
 CONFIG_FILE="$HOME/.swap_monitor_config"
 
-# 설정 파일이 없으면 GUI 또는 CLI를 통해 임계값 입력
+# If configuration file does not exist, get threshold via GUI or CLI
 if [ ! -f "$CONFIG_FILE" ]; then
     if [ "$USE_GUI" = true ]; then
         THRESHOLD=$(zenity --scale --text="Please set the swap memory threshold (40-70): " --min-value=40 --max-value=70 --value=50 --step=1)
@@ -72,7 +75,8 @@ else
     source "$CONFIG_FILE"
 fi
 
-# 메인 모니터링 루프
+# The rest of your script remains the same...
+# Main monitoring loop starts here
 while true; do
     read -r total used <<<$(free | awk '/Swap/ {print $2, $3}')
 
@@ -97,8 +101,8 @@ while true; do
         sync
         echo 3 | sudo tee /proc/sys/vm/drop_caches >/dev/null
 
-        if sudo swapoff -a; then
-            sudo swapon -a
+        if sudo -A swapoff -a; then
+            sudo -A swapon -a
             if [ "$USE_GUI" = true ]; then
                 zenity --info --text="$(date): Swap memory cleared"
             else
