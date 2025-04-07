@@ -99,7 +99,7 @@ while true; do
             echo "WARNING: Swap usage is high (${SWAP_THRESHOLD}%)"
         fi
         sync
-        echo 3 | sudo tee /proc/sys/vm/drop_caches >/dev/null
+        echo 3 | sudo -A tee /proc/sys/vm/drop_caches >/dev/null
 
         if sudo -A swapoff -a; then
             sudo -A swapon -a
