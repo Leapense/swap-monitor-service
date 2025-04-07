@@ -82,6 +82,3 @@ For the complete source code and further documentation, please visit the [GitHub
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
----
-
-Feel free to modify the content to better suit your project details or add any additional sections as needed.
