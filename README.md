@@ -27,7 +27,7 @@ An installer script is provided to simplify the installation process by automati
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/YourUsername/swap-monitor-service.git
+    git clone https://github.com/Leapense/swap-monitor-service.git
     cd swap-monitor-service
     ```
 
